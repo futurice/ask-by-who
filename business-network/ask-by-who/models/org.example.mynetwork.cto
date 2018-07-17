@@ -1,0 +1,70 @@
+/**
+ * Ask By Who Supplier, Survey and Brand network
+ */
+namespace org.example.mynetwork
+
+/* =====================================================*/
+/* ASSETS
+/* =====================================================*/
+asset SurveySummary identified by surveyId {
+	o String surveyId
+    o String summaryData
+    o DateTime createdAt
+    --> Company supplier
+    --> Surveyor surveyor
+}
+
+asset Partnership identified by partnershipId {
+	o String partnershipId
+    o String brandName
+    o String supplierName
+    --> Company supplier
+    --> Company brand
+    --> SurveySummary[] surveys optional
+    o DateTime createdAt
+}
+
+/* =====================================================*/
+/* PARTICIPANTS
+/* =====================================================*/
+participant Company identified by companyId {
+	o String companyId
+    o String companyName
+}
+
+participant Surveyor identified by surveyorId {
+	o String surveyorId
+    o String firstName
+    o String lastName
+    o String organization
+}
+
+/* =====================================================*/
+/* TRANSACTIONS
+/* =====================================================*/
+transaction AddSurvey {
+	o String surveyId
+    o String supplierId
+    --> Surveyor surveyor
+  	o String summaryData
+}
+
+transaction CreateSurveyor {
+	o String surveyorId
+    o String firstName
+    o String lastName
+    o Organization organization
+}
+
+transaction CreatePartnership {
+	--> Company supplier
+    --> Company brand
+    o String partnershipId
+}
+
+/* =====================================================*/
+/* CONCEPTS, ETC.
+/* =====================================================*/
+concept Organization {
+	o String organizationName
+}

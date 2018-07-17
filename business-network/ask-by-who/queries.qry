@@ -1,0 +1,18 @@
+/**
+ * Queries (woah)
+ */
+
+query selectSurveysBySupplier {
+	description: "Select all Surveys based on their Supplier"
+  	statement:
+  		SELECT org.example.mynetwork.SurveySummary
+  			WHERE (supplier == _$supplier)
+}
+
+
+query selectPartnershipsBySupplier {
+	description: "Select all partnerships that match the supplier's full identifier"
+  	statement:
+  		SELECT org.example.mynetwork.Partnership
+  			WHERE (supplier == _$supplier)
+}
