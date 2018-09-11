@@ -1,0 +1,88 @@
+version: 2
+
+services:
+    ca1:
+        image: hyperledger/fabric-ca
+        environment:
+            - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+            - FABRIC_CA_SERVER_CA_NAME=ca-org2
+            - FABRIC_CA_SERVER_TLS_ENABLED=true
+            - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.org2.abw.com-cert.pem
+            - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/598a110f0918c521c9081bce29b18106bbbc6491f710303b5562f6bcc4d963a2_sk
+        ports:
+            - "7054:7054"
+        command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.org2.abw.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/598a110f0918c521c9081bce29b18106bbbc6491f710303b5562f6bcc4d963a2_sk
+        volumes:
+            - ./crypto-config/peerOrganizations/org2.abw.com/ca/:/etc/hyperledger-fabric-ca-server-config
+        container_name: ca_peerorg2
+    
+    peer0.org2.abw.com:
+        container_name: peer0.org2.abw.com
+        image: hyperledger/fabric-peer
+        environment:
+            - CORE_LOGGING_PEER=debug
+            - CORE_CHAINCODE_LOGGING_LEVEL=DEBUG
+            - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+            - CORE_PEER_ID=peer0.org2.abw.com
+            - CORE_PEER_ADDRESS=peer0.org2.abw.com:7051
+            - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=abw_net
+            - CORE_PEER_LOCALMSPID=org2MSP
+            - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/peer/msp
+            - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+            - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb0:5984
+        working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+        command: peer node start #--peer-defaultchain=false
+        ports:
+            - 9051:7051
+            - 9053:7053
+        volumes:
+            - /var/run/:/host/var/run/
+            - ./:/etc/hyperledger/configtx
+            - ./crypto-config/peerOrganizations/org2.abw.com/peers/peer0.org2.abw.com/msp:/etc/hyperledger/peer/msp
+            - ./crypto-config/peerOrganizations/org2.abw.com/users:/etc/hyperledger/msp/users
+        depends_on:
+            - couchdb0
+
+    couchdb0:
+        container_name: couchdb0
+        image: hyperledger/fabric-couchdb
+        ports:
+        - 7984:5984
+        environment:
+            DB_URL: http://localhost:7984/member_db
+
+    peer1.org2.abw.com:
+        container_name: peer1.org2.abw.com
+        image: hyperledger/fabric-peer
+        environment:
+            - CORE_LOGGING_PEER=debug
+            - CORE_CHAINCODE_LOGGING_LEVEL=DEBUG
+            - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+            - CORE_PEER_ID=peer1.org2.abw.com
+            - CORE_PEER_ADDRESS=peer1.org2.abw.com:7051
+            - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=abw_net
+            - CORE_PEER_LOCALMSPID=org2MSP
+            - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/peer/msp
+            - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+            - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb1:5984
+        working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+        command: peer node start #--peer-defaultchain=false
+        ports:
+            - 8051:7051
+            - 8053:7053
+        volumes:
+            - /var/run/:/host/var/run/
+            - ./:/etc/hyperledger/configtx
+            - ./crypto-config/peerOrganizations/org2.abw.com/peers/peer1.org2.abw.com/msp:/etc/hyperledger/peer/msp
+            - ./crypto-config/peerOrganizations/org2.abw.com/users:/etc/hyperledger/msp/users
+        depends_on:
+            - orderer.abw.com
+            - couchdb1
+
+    couchdb1:
+        container_name: couchdb1
+        image: hyperledger/fabric-couchdb
+        ports:
+        - 6984:5984
+        environment:
+            DB_URL: http://localhost:6984/member_db
