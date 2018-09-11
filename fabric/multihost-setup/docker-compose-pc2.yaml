@@ -36,7 +36,7 @@ services:
             - 9051:7051
             - 9053:7053
         volumes:
-            - /var/run/:/host/var/run/
+            - ./var/run/:/host/var/run/
             - ./:/etc/hyperledger/configtx
             - ./crypto-config/peerOrganizations/org2.abw.com/peers/peer0.org2.abw.com/msp:/etc/hyperledger/peer/msp
             - ./crypto-config/peerOrganizations/org2.abw.com/users:/etc/hyperledger/msp/users
@@ -71,7 +71,7 @@ services:
             - 8051:7051
             - 8053:7053
         volumes:
-            - /var/run/:/host/var/run/
+            - ./var/run/:/host/var/run/
             - ./:/etc/hyperledger/configtx
             - ./crypto-config/peerOrganizations/org2.abw.com/peers/peer1.org2.abw.com/msp:/etc/hyperledger/peer/msp
             - ./crypto-config/peerOrganizations/org2.abw.com/users:/etc/hyperledger/msp/users
