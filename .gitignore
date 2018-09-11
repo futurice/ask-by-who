@@ -1,2 +1,6 @@
 node_modules
 dist
+fabric/multihost-setup/crypto-config/*
+!fabric/multihost-setup/crypto-config/.gitkeep
+fabric/multihost-setup/channel-artifacts/*
+!fabric/multihost-setup/channel-artifacts/.gitkeep
