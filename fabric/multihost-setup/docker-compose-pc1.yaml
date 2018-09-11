@@ -11,7 +11,7 @@ services:
             - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/598a110f0918c521c9081bce29b18106bbbc6491f710303b5562f6bcc4d963a2_sk
         ports:
             - "7054:7054"
-        command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.org1.abw.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/598a110f0918c521c9081bce29b18106bbbc6491f710303b5562f6bcc4d963a2_sk
+        command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.org1.abw.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/598a110f0918c521c9081bce29b18106bbbc6491f710303b5562f6bcc4d963a2_sk'
         volumes:
             - ./crypto-config/peerOrganizations/org1.abw.com/ca/:/etc/hyperledger-fabric-ca-server-config
         container_name: ca_peerOrg1
