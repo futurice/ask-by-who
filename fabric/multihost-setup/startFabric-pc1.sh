@@ -16,9 +16,10 @@ docker-compose -f "${DOCKER_FILE}" down
 docker-compose -f "${DOCKER_FILE}" up -d
 
 # wait for Hyperledger Fabric to start
-# incase of errors when running later commands, issue export FABRIC_START_TIMEOUT=<larger number>
-echo "sleeping for ${FABRIC_START_TIMEOUT} seconds to wait for fabric to complete start up"
-sleep ${FABRIC_START_TIMEOUT}
+# in case of errors when running later commands, issue export FABRIC_START_TIMEOUT=<larger number>
+DEFAULT_TIMEOUT=1
+echo "sleeping for ${FABRIC_START_TIMEOUT-$DEFAULT_TIMEOUT} seconds to wait for fabric to complete start up"
+sleep ${FABRIC_START_TIMEOUT-$DEFAULT_TIMEOUT}s
 
 # Create the channel
 docker exec peer0.org1.abw.com peer channel create -o orderer.abw.com:7050 -c $CHANNEL_NAME -f /etc/hyperledger/configtx/channel.tx
