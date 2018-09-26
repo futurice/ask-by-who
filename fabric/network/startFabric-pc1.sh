@@ -25,4 +25,4 @@ sleep ${FABRIC_START_TIMEOUT-$DEFAULT_TIMEOUT}s
 docker exec cli peer channel create -o orderer.example.com:7050 -c $CHANNEL_NAME -f /etc/hyperledger/configtx/channel.tx
 
 # Join peer0.org1.example.com to the channel.
-docker exec -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@org1.example.com/msp" cli peer channel join -b $CHANNEL_NAME.block
+docker exec -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp" cli peer channel join -b $CHANNEL_NAME.block
